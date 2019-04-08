@@ -25,7 +25,7 @@ def dump(obj, nested_level=0, output=sys.stdout):
         print('%s%s' % (nested_level * spacing, obj))
 
 # replace with your personal access token.
-personal_access_token = '0/3f3fdafe316d91ca6951530ea0419b9d'
+personal_access_token = ''
 
 # Construct an Asana client
 client = asana.Client.access_token(personal_access_token)
@@ -34,7 +34,7 @@ client.options['client_name'] = "hello_world_python"
 
 # Get your user info
 diag = {}
-PLD = client.get("/tasks/1116922404389120/subtasks", "")
+PLD = client.get("", "")
 for deliverable in PLD:
     card = client.get("/tasks/" + deliverable["gid"] + "/subtasks", "")
     cards = {}
