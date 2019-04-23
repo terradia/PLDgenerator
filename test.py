@@ -1,14 +1,40 @@
 import asana
 import sys
 import random
+import xml.etree.ElementTree as et
 from enum import Enum
 from datetime import datetime
+import xml.dom.minidom as dom
 
-
-BeginFile = '<mxGraphModel dx="1394" dy="824" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1.5" pageWidth="1169" pageHeight="827" background="#ffffff" math="0" shadow="0">\n    <root>\n        <mxCell id="0"/>\n        <mxCell id="1" parent="0"/>\n'
-EndFile = '    </root>\n</mxGraphModel>\n'
 
 CellId = 2
+Tree = et.Element('mxGraphModel',
+                  {"dx": "1920",
+                   "dy": "1080",
+                   "grid": "1",
+                   "gridSize": "10",
+                   "guides": "1",
+                   "tooltips": "1",
+                   "connect": "1",
+                   "arrows": "1",
+                   "fold": "1",
+                   "page": "1",
+                   "pageScale": "1.5",
+                   "pageWidth": "1920",
+                   "pageHeight": "1080",
+                   "background": "#ffffff",
+                   "math": "0",
+                   "shadow": "0"})
+Doc = et.ElementTree(Tree)
+Root = et.SubElement(Tree, 'root')
+et.SubElement(Root, 'mxCell', {"id": "0"})
+et.SubElement(Root, 'mxCell', {"id": "1", "parent": "0"})
+
+
+class PageConst(Enum):
+    HEIGHT = 1080
+    WIDTH = 1920
+
 
 class CellType(Enum):
     ROOT = 0
@@ -16,38 +42,60 @@ class CellType(Enum):
     CARD = 2
 
 
+class DeliverableConst(Enum):
+    WIDTH = 200
+    HEIGHT = 80
+    PADDING_TOP = 20
+    PADDING_LEFT = 20
+
+
 class GroupCell:
-    def __init__(self, f, level = CellType.ROOT):
+    def __init__(self, level = CellType.ROOT):
         global CellId
+        global Root
+        global Tree
         self.padding = 20
         self.rand = lambda: random.randint(0, 255)
-        self.ID = CellId
+        self.ID = level.name
+        self.x = PageConst.WIDTH.value / 2 - DeliverableConst.WIDTH.value / 2
+        self.y = PageConst.HEIGHT.value / 4 - DeliverableConst.HEIGHT.value / 2
+        self.width = DeliverableConst.WIDTH.value
+        self.height = DeliverableConst.HEIGHT.value
+        self.node = ""
         CellId += 1
         if level == CellType.ROOT:
             self.color = "#AE4132"
-            self.x = -105
-            self.y = 0
-            self.width = 200
-            self.height = 80
         elif level == CellType.DELIVERABLE:
             self.color = "#10739E"
-            self.x = -105
-            self.y = 50
-            self.width = 200
-            self.height = 80
+            self.nbDeli = 0
+            self.y += DeliverableConst.HEIGHT.value + DeliverableConst.PADDING_TOP.value
         elif level == CellType.CARD:
             self.color = '#{:02x}{:02x}{:02x}'.format(self.rand(), self.rand(), self.rand())
-            self.x = 0
-            self.y = 170
-            self.width = 200
-            self.height = 80
+            self.nbCard = 0
+            self.y += DeliverableConst.HEIGHT.value * 2 + DeliverableConst.PADDING_TOP.value
         self.render()
 
     def render(self):
-        f.write('<mxCell id="{}" value="" style="fillColor={};strokeColor=none;opacity=30;" parent="1" vertex="1">\n'
-                '   <mxGeometry x="{}" y="{}" width="{}" height="{}" as="geometry"/>\n'
-                '</mxCell>\n'.format(self.ID, self.color, self.x, self.y, self.width, self.height))
+        self.node = et.SubElement(Root, 'mxCell', {"id": str(self.ID),
+                                                   "value": "",
+                                                   "style": "fillColor=" + self.color + ";strokeColor=none;opacity=30;",
+                                                   "parent": "1",
+                                                   "vertex": "1"})
+        et.SubElement(self.node, 'mxGeometry', {"x": str(self.x),
+                                                "y": str(self.y),
+                                                "width": str(self.width),
+                                                "height": str(self.height),
+                                                "as": "geometry"})
 
+    def addcomponent(self):
+        Root.remove(self.node)
+        if self.ID == "DELIVERABLE":
+            self.width += DeliverableConst.WIDTH.value + DeliverableConst.PADDING_LEFT.value
+            self.nbDeli += 1
+        if self.ID == "CARD":
+            self.height += DeliverableConst.HEIGHT + DeliverableConst.PADDING_TOP
+            self.nbCard += 1
+        self.render()
 
 
 def dump(obj, nested_level=0, output=sys.stdout):
@@ -72,7 +120,7 @@ def dump(obj, nested_level=0, output=sys.stdout):
     else:
         print('%s%s' % (nested_level * spacing, obj))
 
-# replace with your personal access token.
+"""# replace with your personal access token.
 personal_access_token = ''
 
 # Construct an Asana client
@@ -82,10 +130,11 @@ client.options['client_name'] = "hello_world_python"
 
 # Get your user info
 diag = {}
-PLD = client.get("", "")
+PLD = client.get("/tasks//subtasks", "")
 for deliverable in PLD:
     card = client.get("/tasks/" + deliverable["gid"] + "/subtasks", "")
     cards = {}
+    print("deliverable: ", deliverable["name"])
     for tabs in card:
         tab = client.get("/tasks/" + tabs["gid"] + "/subtasks", "")
         subs = []
@@ -93,10 +142,13 @@ for deliverable in PLD:
             subs.append(sub["name"])
         cards[tabs["name"]] = subs
     diag[deliverable["name"]] = cards
-dump(diag)
+dump(diag)"""
+
 filename = "Deliverable " + str(datetime.now().month) + "-" + str(datetime.now().year) + ".xml"
 f = open(filename, "w")
-f.write(BeginFile)
-GroupCell(f, CellType.ROOT)
-f.write(EndFile)
-
+f.truncate(0)
+RootGroup = GroupCell(CellType.ROOT)
+DeliverableGroup = GroupCell(CellType.DELIVERABLE)
+CardGroup = GroupCell(CellType.CARD)
+xmlString = dom.parseString(et.tostring(Tree, encoding="unicode"))
+f.write(xmlString.toprettyxml())
