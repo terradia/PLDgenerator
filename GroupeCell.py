@@ -1,7 +1,7 @@
-from Page import PageConst
 from enum import Enum
 import xml.etree.ElementTree as Et
 import random
+from Page import PageConst
 
 
 class CellType(Enum):
@@ -17,14 +17,12 @@ class DeliverableConst(Enum):
     PADDING_LEFT = 20
 
 
-def rand_color():
-    return '#{:02x}{:02x}{:02x}'.format(random.randint(0, 255),
-                                        random.randint(0, 255),
-                                        random.randint(0, 255))
-
-
 class CellPosition:
     def __init__(self, cell):
+        """
+
+        @param cell:
+        """
         self.cell = cell
         self._x = PageConst.WIDTH.value / 2 - DeliverableConst.WIDTH.value / 2
         self._y = PageConst.HEIGHT.value / 4 - DeliverableConst.HEIGHT.value / 2
@@ -33,43 +31,84 @@ class CellPosition:
 
     @property
     def x(self):
+        """
+
+        @return:
+        """
         return self._x
 
     @property
     def y(self):
+        """
+
+        @return:
+        """
         return self._y
 
     @property
     def width(self):
+        """
+
+        @return:
+        """
         return self._width
 
     @property
     def height(self):
+        """
+
+        @return:
+        """
         return self._height
 
     @x.setter
     def x(self, value):
+        """
+
+        @param value:
+        @return:
+        """
         self._x = value
         self.cell.render()
 
     @y.setter
     def y(self, value):
+        """
+
+        @param value:
+        @return:
+        """
         self._y = value
         self.cell.render()
 
     @width.setter
     def width(self, value):
+        """
+
+        @param value:
+        @return:
+        """
         self._width = value
         self.cell.render()
 
     @height.setter
     def height(self, value):
+        """
+
+        @param value:
+        @return:
+        """
         self._height = value
         self.cell.render()
 
 
 class GroupCell:
     def __init__(self, page, level=CellType.ROOT):
+        """
+
+        @param page:
+        @param level:
+        """
         self.id = str(page.cell_id)
         self.level = level.name
         self.node = None
@@ -92,6 +131,10 @@ class GroupCell:
         self.render()
 
     def render(self):
+        """
+
+        @return:
+        """
         print("render(): ")
         if self.node is not None:
             self.page.root.remove(self.node)
@@ -110,6 +153,11 @@ class GroupCell:
         return self
 
     def append_child(self, child):
+        """
+
+        @param child:
+        @return:
+        """
         print("append_child(): ")
         self._children.append(child)
         self._add_child_component()
@@ -118,15 +166,24 @@ class GroupCell:
         return self
 
     def _update_children(self):
+        """
+
+        @return:
+        """
         print("update_children(): ")
         for index, child in enumerate(self._children):
             if index == 0:
                 child.pos.x = self.pos.x
                 continue
-            child.pos.x = self._children[index - 1].pos.x + DeliverableConst.WIDTH.value + DeliverableConst.PADDING_LEFT.value
+            child.pos.x = self._children[index - 1].pos.x + DeliverableConst.WIDTH.value + \
+                DeliverableConst.PADDING_LEFT.value
         return self
 
     def _add_child_component(self):
+        """
+
+        @return:
+        """
         print("add_child_component(): ")
         if self.level == "DELIVERABLE":
             if len(self._children) == 1:
