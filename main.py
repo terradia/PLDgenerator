@@ -23,7 +23,7 @@ def main():
 
     @return:
     """
-    AsanaSprint("", "")
+    AsanaSprint("")
     """page = Page()
     page.root_group_cell = GroupCell(page, CellType.ROOT)
     page.deliverable_group_cell = GroupCell(page, CellType.DELIVERABLE)
