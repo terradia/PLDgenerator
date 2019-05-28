@@ -1,7 +1,7 @@
 import asana
-from dump import *
 from WebHook import *
-from functools import partial
+from threading import Thread
+from time import sleep
 
 
 class AsanaSprint:
@@ -14,21 +14,14 @@ class AsanaSprint:
         self.access_token = token
         self.client = asana.Client.access_token(self.access_token)
         self.json_pld = {}
-        thread = Thread(target=self._run_server, args=())
+        """self.webhook_manager = WebHookView(self)
+        self.webhook_manager.register(app)
+        thread = Thread(target=self._init_sprint_webhooks)
         thread.start()
-        self._init_sprint_webhooks()
-
-    def _run_server(self):
-        """
-
-        @return:
-        """
-        custom_webhook = partial(WebHook, self)
-        server = HTTPServer(('localhost', 8080), custom_webhook)
-        server.serve_forever()
+        app.run(port="8080")"""
 
     def _init_sprint_webhooks(self):
-        print("_init_sprint_webhooks()")
+        sleep(5)
         project = self.client.get("/projects/", "")[0]["gid"]
         sections = self.client.get("/projects/" + project + "/sections/", "")
         sprint_gid = ""
@@ -41,7 +34,7 @@ class AsanaSprint:
             return
         sprints = self.client.get("/sections/" + sprint_gid + "/tasks/", "")
         for sprint in sprints:
-            dump(sprint)
+            #dump(sprint)
             if not self._check_webhook(sprint["gid"]):
                 self._post_webhook(sprint["gid"])
 
@@ -49,6 +42,8 @@ class AsanaSprint:
         workspace_gid = self.client.get('/workspaces/', "")[0]["gid"]
         webhook = self.client.get(path='/webhooks/',
                                   query={"workspace": workspace_gid, "resource": sprint_gid})
+        dump(webhook)
+        #self.client.delete('/webhooks/' + webhook[0]["gid"], "")
         if len(webhook) == 0:
             print("webhook not set")
             return False
@@ -59,12 +54,10 @@ class AsanaSprint:
         """
         @return:
         """
-        print("_post_webhook()")
-        self.client.webhooks.create(resource=task_id, target="")
+        self.client.webhooks.create(resource=task_id, target="https://df8fc1bd.ngrok.io/WebHook")
         return self
 
     def get_sprint_tasks(self, tasks_ids):
-        print("get_sprint_tasks()")
         """
 
         @param sprint_task_id:
@@ -87,3 +80,4 @@ class AsanaSprint:
             except:
                 pass
             dump(self.json_pld)
+        return self.json_pld

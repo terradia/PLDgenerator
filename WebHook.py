@@ -1,33 +1,24 @@
 import json
-from threading import Thread
-from http.server import BaseHTTPRequestHandler, HTTPServer
 from dump import *
+from flask import Flask, request, Response
+from flask_classful import FlaskView, route
+
+app = Flask(__name__)
 
 
-class WebHook(BaseHTTPRequestHandler):
-    def __init__(self, client, *args, **kwargs):
+class WebHookView(FlaskView):
+    def __init__(self, client):
+        print("WebHook: __init__()")
         self.client = client
-        super(WebHook, self).__init__(*args, **kwargs)
 
-    def do_GET(self):
-        self.send_response(200)
-        self.end_headers()
-
-    def do_POST(self):
-        body = json.loads(self.rfile.read(int(self.headers.get('content-length'))))
-        dump(body)
-        self.send_response(200)
-        print(int(self.headers.get('content-length')))
-        if int(self.headers.get('content-length')) == 2:
-            print("send Secret")
-            self.send_header("X-Hook-Secret", self.headers.get("X-Hook-Secret"))
-        else:
-            print("change triggerd")
-            if len(body["events"]) != 0:
-                tasks_ids = set()
-                for event in body["events"]:
-                    tasks_ids.add(event["resource"])
-                self.client.get_sprint_tasks(tasks_ids)
-        self.end_headers()
-
-
+    @route("/", methods=["POST"])
+    def _webhook_update(self):
+        # self.asana.get_sprint_tasks("")
+        print("_webhook_update()")
+        print(request.get_json())
+        data = request.get_json()
+        if len(data["events"]) == 0:
+            print("sending X-Hook-Secret: ", request.headers["X-Hook-Secret"])
+            return Response(status=200, headers={"X-Hook-Secret": request.headers["X-Hook-Secret"]})
+        print("change triggered")
+        return Response(status=200)

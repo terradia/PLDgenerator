@@ -9,7 +9,7 @@ class PageConst(Enum):
 
 class Page:
     def __init__(self):
-        self.cell_id = 2
+        self.cell_id = 3
         self.root_group_cell = None
         self.deliverable_group_cell = None
         self.tree = Et.Element('mxGraphModel',
@@ -32,8 +32,24 @@ class Page:
         self.doc = Et.ElementTree(self.tree)
         self.root = Et.SubElement(self.tree, 'root')
         self.first = Et.SubElement(self.root, 'mxCell', {"id": "0"})
-        self.second = Et.SubElement(self.root, 'mxCell', {"id": "1", "parent": "0"})
+        self.background = Et.SubElement(self.root, 'mxCell', {"id": "1", "value": "Background", "parent": "0"})
+        self.front = Et.SubElement(self.root, 'mxCell', {"id": "2", "value": "Front", "parent": "0"})
 
     def add_id(self):
         self.cell_id += 1
         return self
+
+
+class CellType(Enum):
+    ROOT = 0
+    DELIVERABLE = 1
+    CARD = 2
+    INNER_CELL = 3
+
+
+class CellConst(Enum):
+    WIDTH = 200
+    HEIGHT = 80
+    PADDING_TOP = 20
+    PADDING_LEFT = 20
+
