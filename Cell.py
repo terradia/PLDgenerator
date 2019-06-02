@@ -1,12 +1,7 @@
 import xml.etree.ElementTree as Et
 from CellPosition import CellPosition
 from Page import CellType, CellConst
-
-"""
-    <mxCell id="2" value="Head of Development" style="rounded=1;fillColor=#23445D;gradientColor=none;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontFamily=Tahoma;fontSize=14" parent="1" vertex="1">
-      <mxGeometry x="670" y="240" width="190" height="80" as="geometry"/>
-    </mxCell>
-"""
+from PIL import ImageFont
 
 
 class Cell:
@@ -18,6 +13,7 @@ class Cell:
         self.page = page
         self.page.add_id()
         self.text = text
+        self.font_size = self._get_wraped_font_size(15)
         self.index = 0
         self.pos = CellPosition(self, parent_node.pos.x + CellConst.PADDING_LEFT.value,
                                 parent_node.pos.y + CellConst.PADDING_TOP.value)
@@ -25,6 +21,22 @@ class Cell:
 
     def __index__(self):
         return self.index
+
+    def _get_wraped_font_size(self, font_size):
+        font = ImageFont.truetype('Montserrat-Regular.ttf', font_size)
+        words = self.text.split()
+        nb_lines = 1
+        wraped = ""
+        for word in words:
+            wraped += word
+            if font.getsize(wraped)[0] > 170:
+                wraped = word
+                nb_lines += 1
+            if nb_lines > 4:
+                font_size -= 1
+                return self._get_wraped_font_size(font_size)
+            wraped += " "
+        return font_size
 
     def render(self):
         if self.node is not None:
@@ -37,9 +49,9 @@ class Cell:
                                                                       "strokeColor=none;"
                                                                       "fontColor=#FFFFFF;"
                                                                       "fontStyle=1;"
-                                                                      "fontFamily=Tahoma;"
+                                                                      "fontFamily=Montserrat;"
                                                                       "whiteSpace=wrap;"
-                                                                      "fontSize=15",
+                                                                      "fontSize=" + str(self.font_size),
                                                              "parent": "2",
                                                              "vertex": "1"})
         Et.SubElement(self.node, "mxGeometry", {"x": str(self.pos.x),
