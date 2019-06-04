@@ -1,5 +1,3 @@
-import json
-from dump import *
 from flask import Flask, request, Response
 from flask_classful import FlaskView, route
 

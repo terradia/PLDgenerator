@@ -1,15 +1,12 @@
 import asana
-from WebHook import *
-from threading import Thread
-from time import sleep
 
 
-class AsanaSprint:
+class AsanaWrapper:
     def __init__(self, token):
         """
-
-        @param token:
-        @param task_id:
+        Create the Asana client object
+        Setup the webhooks
+        @param token: The access token used to authenticate to Asana
         """
         self.access_token = token
         self.client = asana.Client.access_token(self.access_token)
@@ -21,7 +18,10 @@ class AsanaSprint:
         app.run(port="8080")"""
 
     def _init_sprint_webhooks(self):
-        sleep(5)
+        """
+        Get the sprint section's gid use it to request all Sprint's subtasks and post a webhook on each if the webhook
+        doesn't exist
+        """
         project = self.client.get("/projects/", "")[0]["gid"]
         sections = self.client.get("/projects/" + project + "/sections/", "")
         sprint_gid = ""
@@ -34,15 +34,18 @@ class AsanaSprint:
             return
         sprints = self.client.get("/sections/" + sprint_gid + "/tasks/", "")
         for sprint in sprints:
-            #dump(sprint)
             if not self._check_webhook(sprint["gid"]):
                 self._post_webhook(sprint["gid"])
 
     def _check_webhook(self, sprint_gid):
+        """
+        Check if a webhook is attached to the specified gid passed by the sprint_gid param
+        @param sprint_gid: the sprint gid
+        @return: False if the webhook is not set, True if it is
+        """
         workspace_gid = self.client.get('/workspaces/', "")[0]["gid"]
         webhook = self.client.get(path='/webhooks/',
                                   query={"workspace": workspace_gid, "resource": sprint_gid})
-        dump(webhook)
         #self.client.delete('/webhooks/' + webhook[0]["gid"], "")
         if len(webhook) == 0:
             print("webhook not set")
@@ -52,15 +55,33 @@ class AsanaSprint:
 
     def _post_webhook(self, task_id):
         """
-        @return:
+        Post a webhook on the tasks specified by the task_id param
+        @param task_id: the tasks id related to where the webhook must be posted
         """
         self.client.webhooks.create(resource=task_id, target="https://df8fc1bd.ngrok.io/WebHook")
-        return self
 
     def get_sprint_tasks(self, tasks_ids):
         """
+        Loop through each task id passed as the tasks_ids array parameter and request all subtasks to create nested
+        dictionary and lists that represent all the content of the sprint in this format:
+        Sprint name 1:
+        {
+            Deliverable 1:
+            {
+                Card 1:
+                [
+                    task 1
+                    Task 2
+                ]
+                Card 2:
+                [
+                    task 1
+                ]
+            }
+        }
 
-        @param sprint_task_id:
+        @param tasks_ids:
+        @return: the completed dictionary
         """
         print(tasks_ids)
         for task_id in tasks_ids:
@@ -79,5 +100,4 @@ class AsanaSprint:
                     self.json_pld[deliverable["name"]] = cards
             except:
                 pass
-            dump(self.json_pld)
         return self.json_pld

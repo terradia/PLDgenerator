@@ -3,11 +3,17 @@ from enum import Enum
 
 
 class PageConst(Enum):
+    """
+    Define the default size of the page
+    """
     HEIGHT = 1080
     WIDTH = 1920
 
 
 class Page:
+    """
+    Create the base elements used in the xml tree
+    """
     def __init__(self):
         self.cell_id = 3
         self.root_group_cell = None
@@ -41,6 +47,9 @@ class Page:
 
 
 class CellType(Enum):
+    """
+    Define some constant used to define the cell type
+    """
     ROOT = 0
     DELIVERABLE = 1
     CARD = 2
@@ -48,6 +57,9 @@ class CellType(Enum):
 
 
 class CellConst(Enum):
+    """
+    Define the default size of a cell
+    """
     WIDTH = 200
     HEIGHT = 80
     PADDING_TOP = 20

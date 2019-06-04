@@ -1,11 +1,21 @@
+"""
+    Manage the cell position and size used in the GroupCell and Cell class
+"""
 from Page import PageConst, CellConst, CellType
 
 
 class CellPosition:
+    """
+    Manage the cell position and size used in the GroupCell and Cell class
+    """
     def __init__(self, cell, x=0, y=0, width=0, height=0):
         """
-
-        @param cell:
+        Define the cell position and size
+        @param cell: Parent cell
+        @param x: x coordinate of the cell
+        @param y: y coordiante of the cell
+        @param width: width of the cell
+        @param height: height of the cell
         """
         self.cell = cell
         if x == 0:
@@ -40,41 +50,38 @@ class CellPosition:
     @property
     def x(self):
         """
-
-        @return:
+        @return: x coordinate of the cell
         """
         return self._x
 
     @property
     def y(self):
         """
-
-        @return:
+        @return: y coordinate of the cell
         """
         return self._y
 
     @property
     def width(self):
         """
-
-        @return:
+        @return: width of the cell
         """
         return self._width
 
     @property
     def height(self):
         """
-
-        @return:
+        @return: height of the cell
         """
         return self._height
 
     @x.setter
     def x(self, value):
         """
-
-        @param value:
-        @return:
+        set the new value of the x coordinate
+        update the cell's children if the cell is a group
+        rerender the cell in the xml tree
+        @param value: the new x coordinate
         """
         self._x = value
         if self.cell.level == CellType.DELIVERABLE or self.cell.level == CellType.CARD:
@@ -84,9 +91,10 @@ class CellPosition:
     @y.setter
     def y(self, value):
         """
-
-        @param value:
-        @return:
+        set the new value of the y coordinate
+        update the cell's children if the cell is a group
+        rerender the cell in the xml tree
+        @param value: the new y coordinate
         """
         self._y = value
         if self.cell.level == CellType.DELIVERABLE or self.cell.level == CellType.CARD:
@@ -96,9 +104,10 @@ class CellPosition:
     @width.setter
     def width(self, value):
         """
-
-        @param value:
-        @return:
+        set the new value of the width
+        update the cell's children if the cell is a group
+        rerender the cell in the xml tree
+        @param value: the new width
         """
         self._width = value
         if self.cell.level == CellType.DELIVERABLE or self.cell.level == CellType.CARD:
@@ -108,9 +117,10 @@ class CellPosition:
     @height.setter
     def height(self, value):
         """
-
-        @param value:
-        @return:
+        set the new value of the height
+        update the cell's children if the cell is a group
+        rerender the cell in the xml tree
+        @param value: the new height
         """
         self._height = value
         if self.cell.level == CellType.DELIVERABLE or self.cell.level == CellType.CARD:

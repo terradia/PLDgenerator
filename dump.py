@@ -2,12 +2,6 @@ import sys
 
 
 def dump(obj, nested_level=0, output=sys.stdout):
-    """
-    Args:
-        obj:
-        nested_level:
-        output:
-    """
     spacing = '   '
     if type(obj) == dict:
         print('%s{' % ((nested_level) * spacing))

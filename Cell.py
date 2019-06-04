@@ -6,6 +6,12 @@ from PIL import ImageFont
 
 class Cell:
     def __init__(self, page, parent_node, text):
+        """
+        Setup somme cell default information
+        @param page: The related Page where the cell must be rendered
+        @param parent_node: the group cell to which this cell is related
+        @param text: The text to be displayed inside the cell
+        """
         self.id = str(page.cell_id)
         self.level = CellType.INNER_CELL
         self.node = None
@@ -20,9 +26,18 @@ class Cell:
         self.render()
 
     def __index__(self):
+        """
+        @return: self index position from the parent's children array
+        """
         return self.index
 
     def _get_wraped_font_size(self, font_size):
+        """
+        process the displayed text in the desired font and font size to check if it fits inside the cell using the
+        parameter font_size, if not decrease the font size
+        @param font_size: default font size
+        @return: the new font size
+        """
         font = ImageFont.truetype('Montserrat-Regular.ttf', font_size)
         words = self.text.split()
         nb_lines = 1
@@ -39,6 +54,10 @@ class Cell:
         return font_size
 
     def render(self):
+        """
+        erase the cell if it exist
+        render the cell in the xml tree
+        """
         if self.node is not None:
             self.page.root.remove(self.node)
         self.node = Et.SubElement(self.page.root, 'mxCell', {"id": str(self.id),
