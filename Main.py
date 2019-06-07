@@ -1,5 +1,9 @@
+"""
+    The program start from here
+"""
 from AsanaWrapper import AsanaWrapper
 from DiagramGenerator import DiagramGenerator
+
 
 def main():
     """

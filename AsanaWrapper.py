@@ -1,7 +1,13 @@
+"""
+    This module provide a wrapper to get information from asana
+"""
 import asana
 
 
 class AsanaWrapper:
+    """
+        This class is wrapper used to get sprint information from asana
+    """
     def __init__(self, token):
         """
         Create the Asana client object
@@ -17,7 +23,7 @@ class AsanaWrapper:
         thread.start()
         app.run(port="8080")"""
 
-    def _init_sprint_webhooks(self):
+    def init_sprint_webhooks(self):
         """
         Get the sprint section's gid use it to request all Sprint's subtasks and post a webhook on each if the webhook
         doesn't exist
@@ -47,7 +53,7 @@ class AsanaWrapper:
         webhook = self.client.get(path='/webhooks/',
                                   query={"workspace": workspace_gid, "resource": sprint_gid})
         #self.client.delete('/webhooks/' + webhook[0]["gid"], "")
-        if len(webhook) == 0:
+        if not webhook:
             print("webhook not set")
             return False
         print("webhook is set")
@@ -85,19 +91,16 @@ class AsanaWrapper:
         """
         print(tasks_ids)
         for task_id in tasks_ids:
-            try:
-                tasks = self.client.get("/tasks/" + str(task_id) + "/subtasks", "")
-                for deliverable in tasks:
-                    card = self.client.get("/tasks/" + deliverable["gid"] + "/subtasks", "")
-                    cards = {}
-                    print("deliverable: ", deliverable["name"])
-                    for tabs in card:
-                        tab = self.client.get("/tasks/" + tabs["gid"] + "/subtasks", "")
-                        subs = []
-                        for sub in tab:
-                            subs.append(sub["name"])
-                        cards[tabs["name"]] = subs
-                    self.json_pld[deliverable["name"]] = cards
-            except:
-                pass
+            tasks = self.client.get("/tasks/" + str(task_id) + "/subtasks", "")
+            for deliverable in tasks:
+                card = self.client.get("/tasks/" + deliverable["gid"] + "/subtasks", "")
+                cards = {}
+                print("deliverable: ", deliverable["name"])
+                for tabs in card:
+                    tab = self.client.get("/tasks/" + tabs["gid"] + "/subtasks", "")
+                    subs = []
+                    for sub in tab:
+                        subs.append(sub["name"])
+                    cards[tabs["name"]] = subs
+                self.json_pld[deliverable["name"]] = cards
         return self.json_pld

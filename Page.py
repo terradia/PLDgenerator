@@ -1,4 +1,8 @@
+"""
+    This module define some const and the base class for generating the xml tree
+"""
 import xml.etree.ElementTree as Et
+from dataclasses import dataclass
 from enum import Enum
 
 
@@ -10,12 +14,12 @@ class PageConst(Enum):
     WIDTH = 1920
 
 
+@dataclass
 class Page:
     """
     Create the base elements used in the xml tree
     """
     def __init__(self):
-        self.cell_id = 3
         self.root_group_cell = None
         self.deliverable_group_cell = None
         self.tree = Et.Element('mxGraphModel',
@@ -41,19 +45,16 @@ class Page:
         self.background = Et.SubElement(self.root, 'mxCell', {"id": "1", "value": "Background", "parent": "0"})
         self.front = Et.SubElement(self.root, 'mxCell', {"id": "2", "value": "Front", "parent": "0"})
 
-    def add_id(self):
-        self.cell_id += 1
-        return self
-
 
 class CellType(Enum):
     """
     Define some constant used to define the cell type
     """
-    ROOT = 0
-    DELIVERABLE = 1
-    CARD = 2
-    INNER_CELL = 3
+    UNDEFINED = 0
+    ROOT = 1
+    DELIVERABLE = 2
+    CARD = 3
+    INNER_CELL = 4
 
 
 class CellConst(Enum):
@@ -64,4 +65,3 @@ class CellConst(Enum):
     HEIGHT = 80
     PADDING_TOP = 20
     PADDING_LEFT = 20
-
