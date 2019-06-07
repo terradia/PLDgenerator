@@ -6,7 +6,7 @@ def main():
 
     @return:
     """
-    sprint = AsanaWrapper("0/3f3fdafe316d91ca6951530ea0419b9d")
+    sprint = AsanaWrapper("")
     pld_json = sprint.get_sprint_tasks(["1116922404389120"])
     gen = DiagramGenerator()
     gen.create_xml_tree("Terradia", pld_json)
