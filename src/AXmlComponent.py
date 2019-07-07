@@ -2,8 +2,8 @@
     The AXmlComponent module define the base class for the xml used to create diagrams
 """
 from abc import ABC, abstractmethod
-from Page import CellType
-from CellPosition import CellPosition
+from src.Page import CellType
+from src.CellPosition import CellPosition
 
 
 class AXmlComponent(ABC):

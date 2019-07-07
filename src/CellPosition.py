@@ -2,7 +2,7 @@
     Manage the cell position and size used in the Areas and Cell classes
 """
 from dataclasses import dataclass
-from Page import PageConst, CellConst, CellType
+from src.Page import PageConst, CellConst, CellType
 
 
 @dataclass

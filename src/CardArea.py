@@ -3,8 +3,8 @@
 """
 import xml.etree.ElementTree as Et
 import random
-from AXmlComponent import AXmlComponent
-from Page import CellType, CellConst
+from src.AXmlComponent import AXmlComponent
+from src.Page import CellType, CellConst
 
 
 def rand_color():

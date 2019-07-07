@@ -2,8 +2,8 @@
     This module provide the class that generate the xml for the root's area
 """
 import xml.etree.ElementTree as Et
-from AXmlComponent import AXmlComponent
-from Page import CellType
+from src.AXmlComponent import AXmlComponent
+from src.Page import CellType
 
 
 class RootArea(AXmlComponent):

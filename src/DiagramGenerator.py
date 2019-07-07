@@ -8,11 +8,11 @@ import xml.dom.minidom as dom
 import xml.etree.ElementTree as Et
 from datetime import datetime
 from Naked.toolshed.shell import execute_js
-from RootArea import RootArea
-from DelivarableArea import DeliverableArea
-from CardArea import CardArea
-from Cell import Cell
-from Page import Page
+from src.RootArea import RootArea
+from src.DelivarableArea import DeliverableArea
+from src.CardArea import CardArea
+from src.Cell import Cell
+from src.Page import Page
 
 
 class DiagramGenerator:
@@ -45,13 +45,13 @@ class DiagramGenerator:
             Exit the program if one directory can not be created
         """
         try:
-            if not os.path.isdir('./xml'):
-                os.makedirs('./xml')
+            if not os.path.isdir('../xml'):
+                os.makedirs('../xml')
         except OSError:
             sys.exit('Fatal: output directory ./xml does not exist and cannot be created')
         try:
-            if not os.path.isdir('./svg'):
-                os.makedirs('./svg')
+            if not os.path.isdir('../svg'):
+                os.makedirs('../svg')
         except OSError:
             sys.exit('Fatal: output directory ./svg does not exist and cannot be created')
 
@@ -64,7 +64,7 @@ class DiagramGenerator:
         """
         filename = self._get_valid_filename(root_name) + self.gen_date + ".xml"
         self.create_storage_dir()
-        stream = open("./xml/" + filename, "wb")
+        stream = open("../xml/" + filename, "wb")
         xml_string = dom.parseString(Et.tostring(page.tree, encoding="UTF-8"))
         stream.write(xml_string.toprettyxml(encoding="utf-8"))
         stream.close()
@@ -118,6 +118,6 @@ class DiagramGenerator:
             drawio-batch: https://github.com/languitar/drawio-batch
             Naked toolshed's: https://naked.readthedocs.io/toolshed_shell.html
         """
-        for filename in os.listdir('xml'):
-            execute_js('./drawio-batch-master/drawio-batch.js',
-                       "./xml/" + filename + " ./svg/" + os.path.splitext(filename)[0] + '.svg')
+        for filename in os.listdir('../xml'):
+            execute_js('../drawio-batch-master/drawio-batch.js',
+                       "../xml/" + filename + " ../svg/" + os.path.splitext(filename)[0] + '.svg')

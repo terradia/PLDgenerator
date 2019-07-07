@@ -3,9 +3,9 @@
 """
 import xml.etree.ElementTree as Et
 from PIL import ImageFont
-from CellPosition import CellPosition, Pos
-from Page import CellType, CellConst
-from AXmlComponent import AXmlComponent
+from src.CellPosition import CellPosition, Pos
+from src.Page import CellType, CellConst
+from src.AXmlComponent import AXmlComponent
 
 
 class Cell(AXmlComponent):
@@ -33,7 +33,7 @@ class Cell(AXmlComponent):
             @param font_size: default font size
             @return: the new font size
         """
-        font = ImageFont.truetype('Montserrat-Regular.ttf', font_size)
+        font = ImageFont.truetype('../assets/Montserrat-Regular.ttf', font_size)
         words = self.text.split()
         nb_lines = 1
         wraped = ""
