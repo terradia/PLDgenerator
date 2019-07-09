@@ -1,12 +1,15 @@
 import re
 import os
 import sys
+from Naked.toolshed.shell import execute_js
+
 
 
 class FileManager:
     def __init__(self, filename="", content=""):
         self.fs_comp = re.compile(r'(?u)[^-\w.]')
         self.create_storage_dir()
+        self.stream = None
         if filename != "" and content != "":
             self.io(filename, content)
 
@@ -46,12 +49,31 @@ class FileManager:
             mode = "r"
             if content != "":
                 mode = "w"
-            if type(content) == bytes:
-                mode += "b"
-            stream = open(filename, mode)
+                if type(content) == bytes:
+                    mode += "b"
+            self.stream = open(filename, mode)
             if content != "":
-                return stream.write(content)
-            return stream.read()
+                self.stream.write(content)
+                self.close()
+                return
+            return self.stream.read()
         except OSError as err:
             sys.stderr("[ERR] File Manager:", err.strerror)
 
+    def close(self):
+        self.stream.close()
+
+    @staticmethod
+    def generate_svg_from_xml():
+        """
+            Loop through all the xml files that are generated and transform it
+            into an svg diagram using node js package
+            called drawio-batch that is a package wrapper of the draw.io app
+            and launched it using naked toolshed's function
+            execute_js
+            drawio-batch: https://github.com/languitar/drawio-batch
+            Naked toolshed's: https://naked.readthedocs.io/toolshed_shell.html
+        """
+        for filename in os.listdir('../xml'):
+            execute_js('../drawio-batch-master/drawio-batch.js',
+                       "../xml/" + filename + " ../svg/" + os.path.splitext(filename)[0] + '.svg')
