@@ -1,10 +1,8 @@
 """
     The DiagramGenerator regroup all the function that is needed to create the xml's and svg's files
 """
-import os
 import xml.etree.ElementTree as Et
 from datetime import datetime
-from Naked.toolshed.shell import execute_js
 from src.RootArea import RootArea
 from src.DelivarableArea import DeliverableArea
 from src.CardArea import CardArea
@@ -59,18 +57,4 @@ class DiagramGenerator:
                 cell = Cell(page, card_group, card)
                 card_group.append_child(cell)
         self.fm.io(root_name + self.gen_date + ".xml", Et.tostring(page.tree, encoding="UTF-8"))
-
-    @staticmethod
-    def generate_svg_from_xml_tree():
-        """
-            Loop through all the xml files that are generated and transform it
-            into an svg diagram using node js package
-            called drawio-batch that is a package wrapper of the draw.io app
-            and launched it using naked toolshed's function
-            execute_js
-            drawio-batch: https://github.com/languitar/drawio-batch
-            Naked toolshed's: https://naked.readthedocs.io/toolshed_shell.html
-        """
-        for filename in os.listdir('../xml'):
-            execute_js('../drawio-batch-master/drawio-batch.js',
-                       "../xml/" + filename + " ../svg/" + os.path.splitext(filename)[0] + '.svg')
+        self.fm.close()
