@@ -1,45 +1,37 @@
-import re
+import sys
 from string import Template
 from datetime import datetime
-from src.DiagramGenerator import DiagramGenerator
+from functools import wraps
+from src.FileManager import FileManager
+
+
+def required(mandatory):
+    def decorator(f):
+        @wraps(f)
+        def wrapper(*dicts):
+            for key in mandatory:
+                if key not in dicts[1]:
+                    raise ValueError('Key "%s" is missing from argument' % (
+                        key))
+            return f(*dicts)
+        return wrapper
+    return decorator
 
 
 class UserStories:
-    def __init__(self, stories_name, customer_type, need, description, dod, charge):
-        self.substitution = dict(
-            StorieName=stories_name,
-            CustomerType=customer_type,
-            Need=need,
-            Description=description,
-            DoD=dod,
-            TimeCharge=charge
-        )
+    def __init__(self):
         self.gen_date = "_" + str(datetime.now().month) + "_" + str(
             datetime.now().year)
-        self.open_template()
+        self.fm = FileManager()
+        self.template = Template(self.fm.io("../assets/UserStorieTemplate.xml"))
 
-    @staticmethod
-    def _get_valid_filename(filename):
-        """
-            This function is from the django framework:
-                (https://github.com/django/django/blob/master/django/utils/text.py):
-            Return the given string converted to a string that can be used for a clean
-            filename. Remove leading and trailing spaces; convert other spaces to
-            underscores; and remove anything that is not an alphanumeric, dash,
-            underscore, or dot.
-            @param filename: filename string to process
-            @return: The converted string
-        """
-        filename = str(filename).strip().replace(' ', '_')
-        return re.sub(r'(?u)[^-\w.]', '', filename)
-
-    def open_template(self):
-        stream = open("../assets/UserStorieTemplate.xml", "r")
-        template = Template(stream.read())
-        user_stories = template.substitute(self.substitution)
-        stream.close()
-        filename = self._get_valid_filename(self.substitution.get("StorieName")) + self.gen_date + ".xml"
-        stream = open("../xml/" + filename, "wb")
-        stream.write(user_stories.encode('utf-8'))
-        stream.close()
-        DiagramGenerator.generate_svg_from_xml_tree()
+    @required(["StorieName", "CustomerType", "Need", "Description", "DoD", "TimeCharge"])
+    def gen_user_stories(self, stories_info):
+        try:
+            self.fm.io(stories_info.get("StorieName") + self.gen_date + ".xml",
+                       self.template.substitute(stories_info).encode('utf-8'))
+            self.fm.generate_svg_from_xml()
+        except TypeError:
+            sys.exit("[ERR] UserStories: a template error occurred")
+        except ValueError as err:
+            sys.exit("[ERR] UserStories: a template error occurred")
