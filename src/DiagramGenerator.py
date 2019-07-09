@@ -1,10 +1,7 @@
 """
     The DiagramGenerator regroup all the function that is needed to create the xml's and svg's files
 """
-import re
 import os
-import sys
-import xml.dom.minidom as dom
 import xml.etree.ElementTree as Et
 from datetime import datetime
 from Naked.toolshed.shell import execute_js
@@ -13,6 +10,7 @@ from src.DelivarableArea import DeliverableArea
 from src.CardArea import CardArea
 from src.Cell import Cell
 from src.Page import Page
+from src.FileManager import FileManager
 
 
 class DiagramGenerator:
@@ -22,52 +20,7 @@ class DiagramGenerator:
     def __init__(self):
         self.gen_date = "_" + str(datetime.now().month) + "_" + str(
             datetime.now().year)
-
-    @staticmethod
-    def _get_valid_filename(filename):
-        """
-            This function is from the django framework:
-                (https://github.com/django/django/blob/master/django/utils/text.py):
-            Return the given string converted to a string that can be used for a clean
-            filename. Remove leading and trailing spaces; convert other spaces to
-            underscores; and remove anything that is not an alphanumeric, dash,
-            underscore, or dot.
-            @param filename: filename string to process
-            @return: The converted string
-        """
-        filename = str(filename).strip().replace(' ', '_')
-        return re.sub(r'(?u)[^-\w.]', '', filename)
-
-    @staticmethod
-    def create_storage_dir():
-        """
-            Create the root storage directory where are generated xml and svg files if they didn't exist
-            Exit the program if one directory can not be created
-        """
-        try:
-            if not os.path.isdir('../xml'):
-                os.makedirs('../xml')
-        except OSError:
-            sys.exit('Fatal: output directory ./xml does not exist and cannot be created')
-        try:
-            if not os.path.isdir('../svg'):
-                os.makedirs('../svg')
-        except OSError:
-            sys.exit('Fatal: output directory ./svg does not exist and cannot be created')
-
-    def xml_write_to_file(self, page, root_name):
-        """
-            Create and open the file named by the root_name param and a suffix composed of the current month and year
-            Then write the xml tree to this file in an utf-8 encoded format
-            @param page: A Page class that store the xml tree
-            @param root_name: the root name of the generated diagram that is used to create the filename
-        """
-        filename = self._get_valid_filename(root_name) + self.gen_date + ".xml"
-        self.create_storage_dir()
-        stream = open("../xml/" + filename, "wb")
-        xml_string = dom.parseString(Et.tostring(page.tree, encoding="UTF-8"))
-        stream.write(xml_string.toprettyxml(encoding="utf-8"))
-        stream.close()
+        self.fm = FileManager()
 
     @staticmethod
     def init_xml_tree(root_name):
@@ -105,7 +58,7 @@ class DiagramGenerator:
             for card in sorted(cards):
                 cell = Cell(page, card_group, card)
                 card_group.append_child(cell)
-        self.xml_write_to_file(page, root_name)
+        self.fm.io(root_name + self.gen_date + ".xml", Et.tostring(page.tree, encoding="UTF-8"))
 
     @staticmethod
     def generate_svg_from_xml_tree():
