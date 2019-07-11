@@ -4,16 +4,16 @@ import sys
 from Naked.toolshed.shell import execute_js
 
 
-
 class FileManager:
-    def __init__(self, filename="", content=""):
+    def __init__(self, filename="", path="", extension="", content="", encoding="utf-8"):
         self.fs_comp = re.compile(r'(?u)[^-\w.]')
         self.create_storage_dir()
         self.stream = None
         if filename != "" and content != "":
-            self.io(filename, content)
+            self.io(filename, path=path, extension=extension, content=content, encoding=encoding)
 
-    def get_valid_filename(self, filename):
+    @staticmethod
+    def get_valid_filename(filename):
         """
             This function is from the django framework:
                 (https://github.com/django/django/blob/master/django/utils/text.py):
@@ -25,7 +25,7 @@ class FileManager:
             @return: The converted string
         """
         filename = str(filename).strip().replace(' ', '_')
-        return self.fs_comp.match(filename)
+        return re.sub(r'(?u)[^-\w.]', '', filename)
 
     @staticmethod
     def create_storage_dir():
@@ -44,14 +44,16 @@ class FileManager:
         except OSError:
             sys.exit('Fatal: output directory ./svg does not exist and cannot be created')
 
-    def io(self, filename, content=""):
+    def io(self, filename, path="", extension="", content="", encoding="utf-8"):
         try:
             mode = "r"
             if content != "":
                 mode = "w"
                 if type(content) == bytes:
                     mode += "b"
-            self.stream = open(filename, mode)
+                self.stream = open(path + self.get_valid_filename(filename) + extension, mode)
+            else:
+                self.stream = open(path + self.get_valid_filename(filename) + extension, mode, encoding=encoding)
             if content != "":
                 self.stream.write(content)
                 self.close()
@@ -59,6 +61,9 @@ class FileManager:
             return self.stream.read()
         except OSError as err:
             sys.stderr("[ERR] File Manager:", err.strerror)
+        except ValueError as err:
+            sys.stderr("[ERR] File Manager:")
+            print(err)
 
     def close(self):
         self.stream.close()
