@@ -56,5 +56,5 @@ class DiagramGenerator:
             for card in sorted(cards):
                 cell = Cell(page, card_group, card)
                 card_group.append_child(cell)
-        self.fm.io(root_name + self.gen_date + ".xml", Et.tostring(page.tree, encoding="UTF-8"))
+        self.fm.io(root_name, path="../xml/", extension=self.gen_date + ".xml", content=Et.tostring(page.tree, encoding="UTF-8"))
         self.fm.close()
