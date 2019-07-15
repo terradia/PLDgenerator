@@ -1,3 +1,7 @@
+"""
+This module provide a class to manage IO files
+"""
+
 import re
 import os
 import sys
@@ -5,7 +9,20 @@ from Naked.toolshed.shell import execute_js
 
 
 class FileManager:
+    """
+    This class is used to manage the files that can be read or write by the generator
+    """
     def __init__(self, filename="", path="", extension="", content="", encoding="utf-8"):
+        """
+        this function is used to init some variable
+        and read or write one file if the parameter are provided
+        @param filename: the name of the file that have to be opened
+        @param path: the path where to find the file
+        @param extension: can be extra informations for the filename
+            like a creation date or juste the file extention
+        @param content: this is the content that is to be write to the file. Used only when writing a file
+        @param encoding: this is the file encoding, default in utf-8. Used only when reading a file
+        """
         self.fs_comp = re.compile(r'(?u)[^-\w.]')
         self.create_storage_dir()
         self.stream = None
@@ -45,6 +62,17 @@ class FileManager:
             sys.exit('Fatal: output directory ./svg does not exist and cannot be created')
 
     def io(self, filename, path="", extension="", content="", encoding="utf-8"):
+        """
+        Depends on the provided params, read or write a file
+        Warn the user if a file can not be open
+        @param filename: the name of the file that have to be opened
+        @param path: the path where to find the file
+        @param extension: can be extra informations for the filename
+            like a creation date or juste the file extention
+        @param content: this is the content that is to be write to the file. Used only when writing a file
+        @param encoding: this is the file encoding, default in utf-8. Used only when reading a file
+        @return: when reading the content of the read file is returned otherwise nothing is returned
+        """
         try:
             mode = "r"
             if content != "":
@@ -66,6 +94,9 @@ class FileManager:
             print(err)
 
     def close(self):
+        """
+        close the actual opened file stream
+        """
         self.stream.close()
 
     @staticmethod
