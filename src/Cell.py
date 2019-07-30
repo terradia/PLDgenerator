@@ -12,7 +12,7 @@ class Cell(AXmlComponent):
     """
         The Cell class is used to create cell that contain text in the diagram
     """
-    def __init__(self, page, parent_node, text):
+    def __init__(self, page, parent_node, text, done=False):
         """
             Setup some cell default information
             @param page: The related Page where the cell must be rendered
@@ -20,6 +20,7 @@ class Cell(AXmlComponent):
             @param text: The text to be displayed inside the cell
         """
         super().__init__(page, CellType.INNER_CELL)
+        self.done = done
         self.text = text
         self.font_size = self._get_wrapped_font_size(15)
         self.pos = CellPosition(self, Pos(x=parent_node.pos.x + CellConst.PADDING_LEFT.value,
@@ -33,7 +34,7 @@ class Cell(AXmlComponent):
             @param font_size: default font size
             @return: the new font size
         """
-        font = ImageFont.truetype('../assets/Montserrat-Regular.ttf', font_size)
+        font = ImageFont.truetype('../assets/Tahoma.ttf', font_size)
         words = self.text.split()
         nb_lines = 1
         wraped = ""
@@ -63,7 +64,7 @@ class Cell(AXmlComponent):
                                                                       "strokeColor=none;"
                                                                       "fontColor=#FFFFFF;"
                                                                       "fontStyle=1;"
-                                                                      "fontFamily=Montserrat;"
+                                                                      "fontFamily=Tahoma;"
                                                                       "whiteSpace=wrap;"
                                                                       "fontSize=" + str(self.font_size),
                                                              "parent": "2",
