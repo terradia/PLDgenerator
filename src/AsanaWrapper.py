@@ -100,7 +100,8 @@ class AsanaWrapper:
                     tab = self.client.get("/tasks/" + tabs["gid"] + "/subtasks", "")
                     subs = []
                     for sub in tab:
-                        subs.append(sub["name"])
+                        done = bool(self.client.get("/tasks/" + sub["gid"], "")["completed"])
+                        subs.append({"storie": sub["name"], "done": done})
                     cards[tabs["name"]] = subs
                 self.json_pld[deliverable["name"]] = cards
         return self.json_pld
