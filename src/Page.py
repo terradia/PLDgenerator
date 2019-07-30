@@ -63,5 +63,5 @@ class CellConst(Enum):
     """
     WIDTH = 200
     HEIGHT = 80
-    PADDING_TOP = 20
-    PADDING_LEFT = 20
+    PADDING_TOP = 10
+    PADDING_LEFT = 10
