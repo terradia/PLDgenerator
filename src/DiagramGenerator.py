@@ -5,10 +5,11 @@ import xml.etree.ElementTree as Et
 from datetime import datetime
 from src.RootArea import RootArea
 from src.DelivarableArea import DeliverableArea
-from src.CardArea import CardArea
+from src.CardAreas import CardAreas
 from src.Cell import Cell
 from src.Page import Page
 from src.FileManager import FileManager
+from src.dump import dump
 
 
 class DiagramGenerator:
@@ -46,15 +47,13 @@ class DiagramGenerator:
         for deliverable, cards in sorted(diagram_dict.items()):
             cell = Cell(page, page.deliverable_group_cell, deliverable)
             page.deliverable_group_cell.append_child(cell)
-            if not cards:
-                card_group = CardArea(page, hidden=True)
-            else:
-                card_group = CardArea(page)
+            card_group = CardAreas(page)
             page.deliverable_group_cell.append_child(card_group)
             if isinstance(cards, dict):
                 self.create_xml_tree(deliverable, cards)
-            for card in sorted(cards):
-                cell = Cell(page, card_group, card)
-                card_group.append_child(cell)
+            if isinstance(cards, list):
+                for card in cards:
+                    cell = Cell(page, card_group, card["storie"], card["done"])
+                    card_group.append_child(cell)
         self.fm.io(root_name, path="../xml/", extension=self.gen_date + ".xml", content=Et.tostring(page.tree, encoding="UTF-8"))
         self.fm.close()
