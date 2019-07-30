@@ -1,31 +1,20 @@
-"""
-    This module provide the class that generate the xml for card's area
-"""
 import xml.etree.ElementTree as Et
-import random
 from src.AXmlComponent import AXmlComponent
 from src.Page import CellType, CellConst
-
-
-def rand_color():
-    """
-        randomize each 3 RGB component of the color and store it in a string in an hexadecimal format
-        @return: a string containing a randomized color in an hexadecimal format
-    """
-    return '#{:02x}{:02x}{:02x}'.format(random.randint(0, 255),
-                                        random.randint(0, 255),
-                                        random.randint(0, 255))
 
 
 class CardArea(AXmlComponent):
     """
         The CardArea class is used to create colored background area in the diagram
     """
-    def __init__(self, page, hidden=False):
+    def __init__(self, page, last_area, hidden=False, done=False):
         super().__init__(page=page, level=CellType.CARD, hidden=hidden)
-        self.color = rand_color()
-        self.nb_card = 0
-        self.pos.y += CellConst.HEIGHT.value * 2 + (CellConst.PADDING_TOP.value * 4)
+        if done:
+            self.color = "#00FF00"
+        else:
+            self.color = "#FF8800"
+        self.pos.x = last_area.pos.x
+        self.pos.y = last_area.pos.y + CellConst.HEIGHT.value + (CellConst.PADDING_TOP.value * 2)
         self.render()
 
     def render(self):
@@ -57,7 +46,7 @@ class CardArea(AXmlComponent):
 
     def _update_inner_cell(self, child):
         """
-            update the x and the y coordinate of the child passed in parameter
+            update the x and the y coordinate of the child passed as parameter
             @param child: the child to update
         """
         child.pos.x = self.pos.x + CellConst.PADDING_LEFT.value
@@ -76,4 +65,3 @@ class CardArea(AXmlComponent):
             self.pos.height = CellConst.HEIGHT.value + (CellConst.PADDING_TOP.value * 2)
         else:
             self.pos.height += CellConst.HEIGHT.value + CellConst.PADDING_TOP.value
-        self.nb_card += 1
