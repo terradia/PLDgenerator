@@ -53,12 +53,14 @@ class FileManager:
         try:
             if not os.path.isdir('../xml'):
                 os.makedirs('../xml')
-        except OSError:
+        except OSError as err:
+            print(err)
             sys.exit('Fatal: output directory ./xml does not exist and cannot be created')
         try:
             if not os.path.isdir('../svg'):
                 os.makedirs('../svg')
-        except OSError:
+        except OSError as err:
+            print(err)
             sys.exit('Fatal: output directory ./svg does not exist and cannot be created')
 
     def io(self, filename, path="", extension="", content="", encoding="utf-8"):
@@ -112,4 +114,4 @@ class FileManager:
         """
         for filename in os.listdir('../xml'):
             execute_js('../drawio-batch-master/drawio-batch.js',
-                       "../xml/" + filename + " ../svg/" + os.path.splitext(filename)[0] + '.svg')
+                       "../xml/" + filename + " ../svg/" + os.path.splitext(filename)[0] + '.png')
