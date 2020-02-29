@@ -34,13 +34,13 @@ class Cell(AXmlComponent):
             @param font_size: default font size
             @return: the new font size
         """
-        font = ImageFont.truetype('../assets/Tahoma.ttf', font_size)
+        font = ImageFont.truetype('../assets/Montserrat-Regular.ttf', font_size)
         words = self.text.split()
         nb_lines = 1
         wraped = ""
         for word in words:
             wraped += word
-            if font.getsize(wraped)[0] > 170:
+            if font.getsize(wraped)[0] > 160:
                 wraped = word
                 nb_lines += 1
             if nb_lines > 4:
@@ -64,7 +64,7 @@ class Cell(AXmlComponent):
                                                                       "strokeColor=none;"
                                                                       "fontColor=#FFFFFF;"
                                                                       "fontStyle=1;"
-                                                                      "fontFamily=Tahoma;"
+                                                                      "fontFamily=Montserrat;"
                                                                       "whiteSpace=wrap;"
                                                                       "fontSize=" + str(self.font_size),
                                                              "parent": "2",

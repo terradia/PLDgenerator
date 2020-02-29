@@ -16,6 +16,7 @@ class AsanaWrapper:
         """
         self.access_token = token
         self.client = asana.Client.access_token(self.access_token)
+        self.client.headers = {'asana-enable': 'string_ids'}
         self.json_pld = {}
         """self.webhook_manager = WebHookView(self)
         self.webhook_manager.register(app)
@@ -100,8 +101,9 @@ class AsanaWrapper:
                     tab = self.client.get("/tasks/" + tabs["gid"] + "/subtasks", "")
                     subs = []
                     for sub in tab:
-                        done = bool(self.client.get("/tasks/" + sub["gid"], "")["completed"])
-                        subs.append({"storie": sub["name"], "done": done})
+                        task_stories = self.client.get("/tasks/" + sub["gid"], "")
+                        subs.append({"storie": sub["name"], "done": task_stories["completed"],
+                                     "storie_info": task_stories['notes']})
                     cards[tabs["name"]] = subs
                 self.json_pld[deliverable["name"]] = cards
         return self.json_pld

@@ -1,0 +1,246 @@
+﻿Schéma de la base de données
+Membre de Terradia
+Réaliser un schéma précis de la base de données
+Faire un schéma précis de la base de données avec la totalités des tables ainsi que le contenu de ces dernières
+"- Faire une liste des différentes tables - Lister les liens entre les tables - Lister le contenu de chaque table"
+4j
+|
+
+Mise en place base de données
+Membre de Terradia
+Mettre en place la base de données du projet
+Créer une base de données en respectant l'architecture définie
+"- Création base de donnée et modèles - Connexion base de donnée avec API - Docker pour le développement en local"
+2j
+|
+
+Mise en place des migrations
+Membre de Terradia
+Mettre en place les migrations de la base de données
+Processus visant versionner la base de données et réaliser les transitions entre les versions
+"- Mise en place du programme / script pour gérer les Migrations de DB - Première migration (Ajout des tables et de leurs attributs)"
+2j
+|
+
+Script de Seed de la base de données
+Membre de Terradia
+Mettre en place un script de Seed de la base de données
+Script qui remplie la base de données avec des données de test afin de pouvoir travailler avec des conditions réels simulés
+"- Créer le script - Tester le script et la qualité des données simulés"
+2j
+|
+
+Mise en place d'un panel Admin complet
+Membre de Terradia
+Mettre en place un panneau d'aministration complet
+Un panneau d'administration qui permet d'accéder de façon visuelle aux données de la base de données
+"- Mettre en place le panneau d'administration - Vérifier sa fonctionnalité - Setup le visuel / les descriptions pour simplifier le remplissage des données par le Webmaster"
+2j
+|
+
+
+Comparaison des technos
+Membre de Terradia
+Lister les technologies possibles et les comparer pour choisir celle qui correspond a mes besoins
+Faire des recherches de technologies et lister leur POUR & CONTRE pour en dresser une conclusion
+"- Lister les technologies possibles - faire les POUR& CONTRE de chaque techno - Conclure"
+2j
+|
+
+User management (login, register, etc...)
+Membre de Terradia
+Des services api gérant les utilisateurs
+Mettre en place un système de gestion complet des l'utilisateurs
+"- un Login - un accés pour créer un compte - une gestion des comptes perdus"
+4j
+|
+
+Création des modèles et des schema
+Membre de Terradia
+Mettre en place les modèles de base de données sur l'api
+pour manipuler les données de la BDD
+"- Créer tout les modèles sur l'api en local - Créer les modèles sur l'API en Pré production"
+4j
+|
+
+Permissions (se renseigner)
+Membre de Terradia
+Mettre en place un gestiionnaire de droits sur l'api
+Mettre en place des droits qui vont pouvoir donner des accées aux routes aux utilisateurs
+"- Faire des recherches pour savoir si il y a des technologies pour gérer des droits d'utilisateurs / des Best Practices - Réfléchir aux différents roles possibles"
+2j
+|
+
+Création maquette Web
+Membre de Terradia
+Des maquettes visuelles afin de développer l'application web
+Mise en place de la charte graphique de l'application web et des maquettes afin d'avoir des visuels pour le développement - Mise en place d'un premier visuel de l'application Web sur figma
+3j
+|
+
+Modification maquette Mobile
+Membre de Terradia
+Finaliser la maquette de l'application mobile
+La base de la maquette mobile est déjà en place, il faut finir toutes les pages afin d'avoir une base visuelle saine pour débuter le développement
+Finalisation de la maquette mobile sur Figma
+2j
+|
+
+Mise en place d'un design de communication (carte de visite)
+Membre de Terradia
+Des moyens de communiquer autour de mon projet
+Création de cartes de visite afin de pouvoir communiquer sur Terradia de façon physique et professionnelle
+Mise en place d'un design pour les cartes de visite puis impression de ces cartes auprès d'un imprimeur
+1j
+|
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Création des repository Github
+Membre de Terradia
+Avoir accès a des repository afin de stocker les fichier du projet
+Création des repository et des Readme associés sur le github de Terradia
+"- créer le repository terradia-mobile - créer le repository documentation - créer le repository PLDgenerator - créer le repository terradia-frontend - créer le repository terradia-backend - créer le repository terradia-website - rédaction des ReadME correspondant"
+1j
+|
+
+Mise en place d'un serveur développement (pré production)
+Membre de terradia
+Avoir accès a un serveur de pré production
+Mettre en place un serveur de pré production afin de tester les changement avant la mise en production
+"- création du serveur de pré-production - mise en place de la configuration du serveur - mise en place de test unitaire liée a l'environnement de production"
+2j
+|
+
+Mise en commun de l'environnement de développement
+Membre de Terradia
+Avoir un envionnement de développement
+Mise en place d'un environnement de développement similaire pour tout les membre de terradia
+"- création du serveur - encapsulation du serveur dans un docker - partage du docker"
+3j
+|
+
+Mettre en place les Tests unitaires
+Membre de Terradia
+Mettre en place des tests unitaires
+Le but est d'assurer le bon fonctionnement des briques sémantiques du projet dans le temps. Si lorsque on développe une fonctionnalité pour le projet, des test unitaires ne passent pas, cela permet de prévoir des bugs ou des problèmes avant que la nouvelle version soit en production
+"- Installation de la lib sur le serveur - Installation sur github"
+4j
+|
+
+Comparaison finale des technologies
+Membre de Terradia
+Choisir la technologie la plus adaptée à notre projet
+Comparaison de différentes technologies permettant le développement front-end et choix de celles qui nous paraissent les plus adaptées
+Rédaction de pour et de contre sur les différentes technologies utilisables
+1j
+|
+
+Architecture
+Membre de Terradia
+Définir l'architecture de fichier de l'App Mobile et de l'App Web
+Mettre en place l'architecture de fichier pour l'app mobile et l'app web pour faire en sorte que on ai un standard sur comment ajouter des fichers etc...
+:
+1j
+|
+
+Authentication (Login, Register, etc....)
+Membre de Terradia
+Pouvoir m'inscrire et me connecter à Terradia en version Web et Mobile
+Développement de la section inscription, et connexion des applications web et mobile et relier le tout à la base de données
+"- Développement de la connection sur le BackEnd - Développement de la partie de création d'utilisateur sur le BackEND - Développement de la connection sur la partie Mobile - Développement de la connection au serveur sur la partie Front Web - Register sur Mobile - Register sur Web"
+11j homme
+|
+
+Finalisation du site vitrine
+Membre de Terradia
+Que le projet ai un site internet
+Le but est de développer le site internet qui présentera le projet  en attendant que celui-ci soit lancé dans quelques mois
+"- Faire la page principale - Faire la page de présentation du projet - Faire la page de contact"
+4j
+|
+
+Mise en ligne
+Membre de Terradia
+Mettre en ligne le site internet
+S'occuper de mettre le site sur internet
+"- Réccupérer le Code de WebFlow - Le mettre sur un serveur Netlify via Github (ou un VPS)"
+1j
+|
+
+Gestion des réunions à l'étranger
+Membre de Terradia
+Savoir comment les réunions vont s'organiser dans le futur
+Les membres du groupe vont partir à l'étranger ou pourrons être ammené a travailler a longue distance, le but est de prendre du temps pour définir comment les réunions pourrons se passer
+:
+1j
+|
+
+Mise en place d'un planning de disponibilités
+Membre de Terradia
+Avoir un planning des disponibilités de mes collègues
+Le but est de savoir a peu près qui est libre quand, pour pouvoir définir les dates de réunions, mais aussi quand on peux contacter un autre membre du groupe.
+"- Mettre en place un Google Calendar partagé ou un Microsoft Calendar - Remplir en prévision pour le mois le planning de tout le monde"
+1j
+|
+
+Redaction des processus
+Membre de Terradia
+Avoir des Processes pour savoir quoi faire avant certaines actions
+Les Processes servirons au groupe de Terradia mais aussi aux eventuels futurs employés d'avoir une base pour apprendre quoi faire avant de push sur Github (par exemple)
+"- Que faire avant de push - Process pour installer le projet sur son PC en local - Ajouter une documentation - avant fin de semaine : Mettre à jour son planning partagé de possibilités - avant la fin de semaine : Mettre à jour le Statement of Work"
+6j
+|
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

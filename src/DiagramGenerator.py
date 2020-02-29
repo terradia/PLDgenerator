@@ -9,7 +9,7 @@ from src.CardAreas import CardAreas
 from src.Cell import Cell
 from src.Page import Page
 from src.FileManager import FileManager
-from src.dump import dump
+from src.UserStories import UserStories
 
 
 class DiagramGenerator:
@@ -19,6 +19,7 @@ class DiagramGenerator:
     def __init__(self):
         self.gen_date = "_" + str(datetime.now().month) + "_" + str(
             datetime.now().year)
+        self.UserStorie = UserStories()
         self.fm = FileManager()
 
     @staticmethod
@@ -36,6 +37,20 @@ class DiagramGenerator:
         page.deliverable_group_cell = DeliverableArea(page)
         return page
 
+    def parse_storie_info(self, storie_name, storie_info):
+        if storie_info == "":
+            return None
+        storie_info = storie_info.split(";")
+        if len(storie_info) < 5 or len(storie_info) > 7:
+            return None
+        storie = {"StorieName": storie_name,
+                 "CustomerType": storie_info[0].strip('\n ,;'),
+                 "Need": storie_info[1].strip('\n ,;'),
+                 "Description": storie_info[2].strip('\n ,;'),
+                 "DoD": storie_info[3].strip('\n ,;'),
+                 "TimeCharge": storie_info[4].strip('\n ,;')}
+        return storie
+
     def create_xml_tree(self, root_name, diagram_dict):
         """
             Loop through the diagram_dict param to create the xml tree
@@ -51,9 +66,18 @@ class DiagramGenerator:
             page.deliverable_group_cell.append_child(card_group)
             if isinstance(cards, dict):
                 self.create_xml_tree(deliverable, cards)
+                for card in cards:
+                    cell = Cell(page, card_group, card)
+                    card_group.append_child(cell)
             if isinstance(cards, list):
                 for card in cards:
                     cell = Cell(page, card_group, card["storie"], card["done"])
                     card_group.append_child(cell)
-        self.fm.io(root_name, path="../xml/", extension=self.gen_date + ".xml", content=Et.tostring(page.tree, encoding="UTF-8"))
+                    storie = self.parse_storie_info(card['storie'], card["storie_info"])
+                    if storie:
+                        self.UserStorie.gen_user_stories(storie)
+        self.fm.io(root_name,
+                   path="../xml/",
+                   extension=self.gen_date + ".xml",
+                   content=Et.tostring(page.tree, encoding="UTF-8"))
         self.fm.close()

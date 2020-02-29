@@ -5,7 +5,7 @@ This module provide a class to manage IO files
 import re
 import os
 import sys
-from Naked.toolshed.shell import execute_js
+import subprocess
 
 
 class FileManager:
@@ -57,11 +57,11 @@ class FileManager:
             print(err)
             sys.exit('Fatal: output directory ./xml does not exist and cannot be created')
         try:
-            if not os.path.isdir('../svg'):
-                os.makedirs('../svg')
+            if not os.path.isdir('../pdf'):
+                os.makedirs('../pdf')
         except OSError as err:
             print(err)
-            sys.exit('Fatal: output directory ./svg does not exist and cannot be created')
+            sys.exit('Fatal: output directory ./pdf does not exist and cannot be created')
 
     def io(self, filename, path="", extension="", content="", encoding="utf-8"):
         """
@@ -90,9 +90,9 @@ class FileManager:
                 return
             return self.stream.read()
         except OSError as err:
-            sys.stderr("[ERR] File Manager:", err.strerror)
+            sys.stderr.write("[ERR] File Manager: " + err.strerror)
         except ValueError as err:
-            sys.stderr("[ERR] File Manager:")
+            sys.stderr.write("[ERR] File Manager:")
             print(err)
 
     def close(self):
@@ -112,6 +112,11 @@ class FileManager:
             drawio-batch: https://github.com/languitar/drawio-batch
             Naked toolshed's: https://naked.readthedocs.io/toolshed_shell.html
         """
-        for filename in os.listdir('../xml'):
-            execute_js('../drawio-batch-master/drawio-batch.js',
-                       "../xml/" + filename + " ../svg/" + os.path.splitext(filename)[0] + '.png')
+        print("Converting xml files to pdf")
+        print(subprocess.run(['C:/Program Files/draw.io/draw.io.exe',
+                              '--export',
+                              '--output=../pdf/',
+                              '--format=png',
+                              '--crop',
+                              '../xml/'],
+                             stdout=True))

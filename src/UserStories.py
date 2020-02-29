@@ -50,6 +50,10 @@ class UserStories:
         passed as parameter using the template engine
         @param stories_info: a dict that contain all the filed needed to generate a user stories
         """
+        for k, info in stories_info.items():
+            info = info.replace("&", "&amp;")
+            info = info.replace("\"", "&quot;")
+            stories_info.update({k: info})
         print("Generating", stories_info.get("StorieName"))
         try:
             self.fm.io(stories_info.get("StorieName"), path="../xml/", extension=self.gen_date + ".xml",
